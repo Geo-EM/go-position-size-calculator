@@ -8,16 +8,18 @@ import (
 )
 
 var (
-	risk  float64
-	entry float64
-	stop  float64
+	risk   float64
+	entry  float64
+	stop   float64
+	shares float64
 )
 
 func runPositionCmd(cmd *cobra.Command, args []string) error {
 	inputs := calculator.PositionInput{
-		Risk:  risk,
-		Entry: entry,
-		Stop:  stop,
+		Risk:   risk,
+		Shares: shares,
+		Entry:  entry,
+		Stop:   stop,
 	}
 
 	result, err := calculator.CalculatePosition(inputs)
@@ -25,13 +27,13 @@ func runPositionCmd(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	fmt.Println("Position size Result")
+	fmt.Println("\nPosition Result")
 	fmt.Println("---------------------")
-	fmt.Printf("Risk Amount: %.2f\n", risk)
-	fmt.Printf("Entry Amount: %.2f\n", entry)
-	fmt.Printf("Stop Amount: %.2f\n", stop)
+	fmt.Printf("Entry Price: %.2f\n", entry)
+	fmt.Printf("Stop Loss: %.2f\n", stop)
 	fmt.Printf("Risk Per Share: %.2f\n", result.RiskPerShare)
-	fmt.Printf("Shares To Buy: %.2f\n", result.Shares)
+	fmt.Printf("Shares: %.2f\n", result.Shares)
+	fmt.Printf("Total Risk: %.2f\n", result.RiskAmount)
 
 	return nil
 }
@@ -46,10 +48,11 @@ func init() {
 	positionCmd.Flags().Float64VarP(&risk, "risk", "r", 0, "Maximum acceptable loss")
 	positionCmd.Flags().Float64VarP(&entry, "entry", "e", 0, "Entry price")
 	positionCmd.Flags().Float64VarP(&stop, "stop", "s", 0, "Stop loss price")
+	positionCmd.Flags().Float64VarP(&shares, "shares", "n", 0, "Number of shares")
 
-	positionCmd.MarkFlagRequired("risk")
 	positionCmd.MarkFlagRequired("entry")
 	positionCmd.MarkFlagRequired("stop")
+	positionCmd.MarkFlagsOneRequired("shares", "risk")
 
 	rootCmd.AddCommand(positionCmd)
 }
