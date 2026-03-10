@@ -43,9 +43,9 @@ var positionCmd = &cobra.Command{
 }
 
 func init() {
-	positionCmd.Flags().Float64Var(&risk, "risk", 0, "Maximum acceptable loss")
-	positionCmd.Flags().Float64Var(&entry, "entry", 0, "Entry price")
-	positionCmd.Flags().Float64Var(&stop, "stop", 0, "Stop loss price")
+	positionCmd.Flags().Float64VarP(&risk, "risk", "r", 0, "Maximum acceptable loss")
+	positionCmd.Flags().Float64VarP(&entry, "entry", "e", 0, "Entry price")
+	positionCmd.Flags().Float64VarP(&stop, "stop", "s", 0, "Stop loss price")
 
 	positionCmd.MarkFlagRequired("risk")
 	positionCmd.MarkFlagRequired("entry")
